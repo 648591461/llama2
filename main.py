@@ -3,12 +3,7 @@ import random
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
-
-# 定义字典
-words = '<PAD>,<BOS>,<EOS>,1,2,3,4,5,6,7,8,9,0,+,='
-vocab = {word: i for i, word in enumerate(words.split(','))}  # 语料
-vocab_r = [k for k, v in vocab.items()]  # 反向查询
-
+from vocab import vocab
 
 # 两数相加数据集
 def get_data(min_length=10, max_length=20):
