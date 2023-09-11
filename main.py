@@ -3,7 +3,29 @@ import random
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
-from vocab import vocab
+from vocab import vocab, vocab_r
+from model import LlamaForCausalLM, LlamaConfig
+
+config = LlamaConfig(
+    vocab_size=len(vocab),
+    hidden_size=512,
+    intermediate_size=2752,
+    num_hidden_layers=8,
+    num_attention_heads=16,
+    num_key_value_heads=4,
+    rope_scaling = None,
+    hidden_act='silu',
+    max_position_embeddings=128,
+    initializer_range=0.02,
+    rms_norm_eps=1e-06,
+    use_cache=True,
+    pad_token_id=0,
+    bos_token_id=1,
+    eos_token_id=2,
+    tie_word_embeddings=False,
+    pretraining_tp = 1,
+    max_new_tokens = 100
+)
 
 # 两数相加数据集
 def get_data(min_length=10, max_length=20):
@@ -113,17 +135,20 @@ def data_collator(examples: list):
     }
 
 # 数据加载器
-# 数据加载器
 dl_train = DataLoader(dataset=ds_train,
          batch_size=200,
          drop_last=True,
          shuffle=True,
          collate_fn = data_collator
         )
-
 dl_val = DataLoader(dataset=ds_val,
          batch_size=200,
          drop_last=True,
          shuffle=False,
          collate_fn = data_collator
         )
+
+model = LlamaForCausalLM(config)
+for data in dl_train:
+    out = model.forward(input_ids=data['input_ids'], labels=data['labels'], attention_mask=data['attention_mask'])
+print(out.loss)
