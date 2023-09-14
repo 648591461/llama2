@@ -1,3 +1,4 @@
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 # llama2
 利用Transformer库从0开始搭建llama2
 # 模型结构图
@@ -6,7 +7,7 @@
 ## llama2 用到的技术梳理
 （基本原则）讲清楚缘由：为什么这样子这么做，涉及到模型本身的搭建：
 ### 旋转位置编码 RoPE
-* 绝对位置编码：
+* 绝对位置编码：$$attent(x_m, x_n, m, n) = f(x_m, x_n, m, n)$$
 * 相对位置编码：
 * 旋转位置编码：旋转位置编的巧妙之处在于通过绝对编码的方式实现了相对编码的效果。
 个人理解：旋转矩阵的向量积
